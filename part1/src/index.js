@@ -1,55 +1,28 @@
 import { createRoot } from "react-dom/client";
-import { useState } from "react";
 import "./index.css";
+import App from "./App";
 
-const WarningNotUsed = () => {
-  return <h1>Todavia no se ha usado el contador</h1>;
-};
-
-const ListOfClicks = ({ clicks }) => {
-  return <p>{clicks.join(", ")}</p>;
-};
-
-const App = () => {
-  // const [left, setLeft] = useState(0);
-  // const [right, setRight] = useState(0);
-  
-  const [clicks, setClicks] = useState([]);
-
-  const handleClickLeft = () => {
-    setClicks((prevClicks) => [...prevClicks, "L"]);
-  };
-
-  const handleClickRight = () => {
-    setClicks((prevClicks) => [...prevClicks, "R"]);
-  };
-
-  const handleReset = () => {
-    setClicks([]);
-  };
-
-  const left = clicks.filter((click) => click === "L");
-  const right = clicks.filter((click) => click === "R");
-
-  return (
-    <div>
-      {left.length}
-      <button onClick={handleClickLeft}>left</button>
-      <button onClick={handleClickRight}>right</button>
-      {right.length}
-      <p>
-        <button onClick={handleReset}>reset</button>
-      </p>
-      <p>Clicks totales: {clicks.length}</p>
-      {clicks.length === 0 ? (
-        <WarningNotUsed />
-      ) : (
-        <ListOfClicks clicks={clicks} />
-      )}
-    </div>
-  );
-};
+const notes = [
+    {
+      id: 1,
+      content: "HTML is easy",
+      date: "2019-05-30T17:30:31.098Z",
+      important: true,
+    },
+    {
+      id: 2,
+      content: "Browser can execute only JavaScript",
+      date: "2019-05-30T18:39:34.091Z",
+      important: false,
+    },
+    {
+      id: 3,
+      content: "GET and POST are the most important methods of HTTP protocol",
+      date: "2019-05-30T19:20:14.298Z",
+      important: true,
+    },
+  ];
 
 const rootElement = document.getElementById("root");
 const root = createRoot(rootElement);
-root.render(<App />);
+root.render(<App notes={notes}/>);
