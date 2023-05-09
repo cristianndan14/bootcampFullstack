@@ -14,37 +14,32 @@ const App = () => {
   // const [left, setLeft] = useState(0);
   // const [right, setRight] = useState(0);
 
-  const [counters, setCounters] = useState({
-    left: 0,
-    right: 0,
-    mensaje: "Mensaje en el estado",
-  });
-
   const [clicks, setClicks] = useState([]);
 
   const handleClickLeft = () => {
-    const newCountersState = {
-      ...counters,
-      left: counters.left + 1,
-    };
-    setCounters(newCountersState);
     setClicks((prevClicks) => [...prevClicks, "L"]);
   };
 
   const handleClickRight = () => {
-    setCounters({
-      ...counters,
-      right: counters.right + 1,
-    });
     setClicks((prevClicks) => [...prevClicks, "R"]);
   };
 
+  const handleReset = () => {
+    setClicks([]);
+  };
+
+  const left = clicks.filter((click) => click === "L");
+  const right = clicks.filter((click) => click === "R");
+
   return (
     <div>
-      {counters.left}
+      {left.length}
       <button onClick={handleClickLeft}>left</button>
       <button onClick={handleClickRight}>right</button>
-      {counters.right}
+      {right.length}
+      <p>
+        <button onClick={handleReset}>reset</button>
+      </p>
       <p>Clicks totales: {clicks.length}</p>
       {clicks.length === 0 ? (
         <WarningNotUsed />
