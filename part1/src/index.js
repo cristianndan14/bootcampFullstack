@@ -13,6 +13,7 @@ const ListOfClicks = ({ clicks }) => {
 const App = () => {
   // const [left, setLeft] = useState(0);
   // const [right, setRight] = useState(0);
+  
   const [clicks, setClicks] = useState([]);
 
   const handleClickLeft = () => {
