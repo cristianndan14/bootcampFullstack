@@ -1,11 +1,24 @@
 import "./App.css";
 import { Note } from "./Note.js";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-export default function App(props) {
-  const [notes, setNotes] = useState(props.notes);
+import { getAllNotes, createNote } from "./services/notes";
+// import { getAllNotes } from "./services/notes/getAllNotes";
+// import { createNote } from "./services/notes/createNote";
+
+export default function App() {
+  const [notes, setNotes] = useState([]);
   const [newNote, setNewNote] = useState("");
-  const [showAll, setShowAll] = useState(true);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setLoading(true);
+    getAllNotes()
+      .then((notes) => {
+        setNotes(notes);
+        setLoading(false);
+      });
+  }, []);
 
   const handleChange = (event) => {
     setNewNote(event.target.value);
@@ -13,45 +26,35 @@ export default function App(props) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+
     const noteToAddToState = {
-      id: notes.length + 1,
-      content: newNote,
-      date: new Date().toISOString(),
-      important: Math.random() < 0.5,
+      title: newNote,
+      body: newNote,
+      userId: 1,
     };
-    console.log(noteToAddToState);
-    setNotes(notes.concat(noteToAddToState));
+
+    createNote(noteToAddToState).then(newNote => {
+      setNotes((prevNotes) => prevNotes.concat(newNote));
+    });
+
     setNewNote("");
   };
-
-  const handleShowAll = () => {
-    setShowAll(() => !showAll);
-  };
-
-  if (typeof notes === "undefined" || notes.length === 0) {
-    return "No hay notas que mostrar";
-  }
 
   return (
     <div>
       <h1>Notes</h1>
-      <button onClick={handleShowAll}>
-        {showAll ? "Show only important" : "Show all"}
-      </button>
-      <ul>
-        {notes
-          .filter((note) => {
-            if (showAll === true) return true;
-            return note.important === true;
-          })
-          .map((note) => (
-            <Note key={note.id} content={note.content} date={note.date} />
-          ))}
-      </ul>
+      {loading ? "Cargando..." : ""}
       <form onSubmit={handleSubmit}>
         <input type="text" onChange={handleChange} value={newNote} />
         <button>Crear nota</button>
       </form>
+      <ol>
+        {notes
+          .map((note) => (
+            <Note key={note.id} body={note.body} title={note.title} />
+          ))
+          .reverse()}
+      </ol>
     </div>
   );
 }
